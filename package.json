@@ -1,0 +1,15 @@
+{
+  "name": "pamoja-web",
+  "version": "1.0.0",
+  "description": "PAMOJA website: the member app, the developer console and the sponsor report page.",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {},
+  "license": "UNLICENSED"
+}

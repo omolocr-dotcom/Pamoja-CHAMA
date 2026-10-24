@@ -1,0 +1,19 @@
+{
+  "name": "PAMOJA - Chama Group App",
+  "short_name": "PAMOJA",
+  "description": "Run your chama, women group, youth group or table banking group: contributions, loans, projects, welfare and meetings in one app.",
+  "id": "./client.html",
+  "start_url": "./client.html?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#20335b",
+  "theme_color": "#20335b",
+  "lang": "en",
+  "categories": ["finance", "productivity", "business"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
