@@ -19,7 +19,7 @@
     api('GET', '/me').then(function (r) { setSession(r.user, r.memberships); }).catch(function () { showLogin(); });
   }
   function showLogin() {
-    P.loginView(app, { title: 'PAMOJA', hint: 'Sign in with your phone number. We will text you a code.', onSuccess: function (r) { setSession(r.user, r.memberships); } });
+    P.loginView(app, { title: 'PAMOJA', hint: 'Sign in with your email address. We will email you a code.', onSuccess: function (r) { setSession(r.user, r.memberships); } });
   }
   function setSession(user, groups, gid) {
     S.user = user; S.groups = groups.filter(function (m) { return m.status === 'active'; });
@@ -185,7 +185,7 @@
       ${is('Chairperson') ? html`<form class="card" data-form="role"><h3>Change a role</h3><label>Member<select name="mid">${r[0].map(function (m) { return html`<option value="${m.membership_id}">${m.name}</option>`; })}</select></label><label>New role<select name="role"><option>Member</option><option>Chairperson</option><option>Deputy Chairperson</option><option>Secretary</option><option>Treasurer</option><option>Admin</option><option>Organizing Secretary</option><option>Operations</option></select></label><button class="btn">Change role</button></form>` : ''}`;
     });
   };
-  forms.addmem = function (fd) { return api('POST', g('/members'), { name: fd.get('name'), phone: fd.get('phone') }).then(function () { toast('Added. An invitation SMS was sent.'); }); };
+  forms.addmem = function (fd) { return api('POST', g('/members'), { name: fd.get('name'), phone: fd.get('phone') }).then(function () { toast('Added. An invitation will be sent when email invitations are enabled.'); }); };
   forms.import = function (fd) { return api('POST', g('/members/import'), { lines: fd.get('lines') }).then(function (r) { toast(r.added + ' added' + (r.skipped.length ? ', ' + r.skipped.length + ' skipped' : '')); }); };
   forms.role = function (fd) { return api('POST', g('/members/' + fd.get('mid') + '/role'), { role: fd.get('role') }).then(function () { toast('Role changed'); }); };
   acts['mem-rm'] = function (el) { if (!w.confirm('Remove this member from the group?')) return; return api('POST', g('/members/' + el.dataset.id + '/remove'), {}).then(function () { toast('Removed'); }); };

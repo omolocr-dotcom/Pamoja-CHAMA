@@ -1,5 +1,5 @@
 /* PAMOJA developer console. Separate from the member app: members never load this file.
-   The server only answers these requests for phone numbers listed in DEV_PHONES on the server. */
+   The server authorizes only email addresses listed in DEV_ADMIN_EMAILS on the server. */
 (function (w) {
   'use strict';
   var P = w.PAMOJA, api = P.api, html = P.html, money = P.money, dt = P.dt, toast = P.toast;
@@ -11,9 +11,9 @@
     if (!P.store.get('pamoja_token')) return showLogin();
     api('GET', '/me').then(function (r) { start(r.user); }).catch(showLogin);
   }
-  function showLogin() { P.loginView(app, { title: 'PAMOJA developer console', hint: 'For the app developer only. Sign in with your developer phone number.', onSuccess: function (r) { start(r.user); } }); }
+  function showLogin() { P.loginView(app, { title: 'PAMOJA developer console', hint: 'For authorized developers only. Sign in with your developer email address.', onSuccess: function (r) { start(r.user); } }); }
   function start(user) {
-    if (!user.is_dev) { P.signOutLocal(); showLogin(); return toast('This phone number is not a developer number.', 1); }
+    if (!user.is_dev) { P.signOutLocal(); showLogin(); return toast('This email address is not authorized for developer access.', 1); }
     S.user = user; if (!w.location.hash) w.location.hash = '#/groups'; else route();
   }
   w.addEventListener('pamoja:signedout', showLogin);
@@ -94,7 +94,7 @@
     var body = { accept: accept, group: { name: v('name'), county: v('county'), town: v('town'), postal: v('postal'), street: v('street'), near_type: v('near_type'), near_name: v('near_name'), opposite: v('opposite') },
       leaders: { chair: { name: v('chair_name'), phone: v('chair_phone') }, sec: { name: v('sec_name'), phone: v('sec_phone') }, treas: { name: v('treas_name'), phone: v('treas_phone') } } };
     return api('POST', '/dev/groups/clone', body).then(function (r) {
-      S.last = r.status === 'accepted' ? 'Accepted. Group code ' + r.code + '. 3 SMS sent.' : 'Not accepted. ' + r.sms_sent + ' SMS sent. Still missing: ' + (r.missing.join(', ') || 'nothing');
+      S.last = r.status === 'accepted' ? 'Accepted. Group code ' + r.code + '. 3 email sent.' : 'Not accepted. ' + r.sms_sent + ' email sent. Still missing: ' + (r.missing.join(', ') || 'nothing');
       toast(S.last);
     });
   };
