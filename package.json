@@ -1,15 +1,17 @@
 {
   "name": "pamoja-web",
-  "version": "1.0.0",
-  "description": "PAMOJA website: the member app, the developer console and the sponsor report page.",
+  "version": "1.1.0",
+  "description": "PAMOJA frontend with a PostgreSQL-backed email OTP API foundation",
   "private": true,
   "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
+  "scripts": {"start": "node server.js", "check": "node --check server.js"},
+  "engines": {"node": ">=18"},
+  "dependencies": {
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "pg": "^8.13.1",
+    "nodemailer": "^6.9.16"
   },
-  "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {},
   "license": "UNLICENSED"
 }

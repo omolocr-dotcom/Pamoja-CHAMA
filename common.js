@@ -58,22 +58,22 @@
     if (k === 'back') w.history.back(); else if (k === 'fwd') w.history.forward(); else w.location.hash = '#/home';
   });
 
-  /* Sign in with a phone number and an SMS code. opts: {title, hint, onSuccess(res)} */
+  /* Sign in with an email address and a 6-digit email code. opts: {title, hint, onSuccess(res)} */
   function loginView(root, opts) {
-    var phone = '';
+    var email = '';
     function step1() {
-      render(root, html`<div class="login card"><img class="logo big" src="logo.png" alt="PAMOJA logo"><h1>${opts.title}</h1><p class="sub">${opts.hint}</p><form id="f1"><label for="ph">Phone number</label><input id="ph" name="phone" inputmode="tel" autocomplete="tel" placeholder="0712345678" required><button class="btn">Send me a code</button></form></div>`);
+      render(root, html`<div class="login card"><img class="logo big" src="logo.png" alt="PAMOJA logo"><h1>${opts.title}</h1><p class="sub">${opts.hint}</p><form id="f1"><label for="em">Email address</label><input id="em" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" maxlength="254" required><button class="btn">Send me a code</button></form></div>`);
       root.querySelector('#f1').onsubmit = function (e) {
-        e.preventDefault(); phone = new FormData(e.target).get('phone'); busy(e.target, true);
-        api('POST', '/auth/request-otp', { phone: phone }).then(step2).catch(function (x) { toast(x.message, 1); busy(e.target, false); });
+        e.preventDefault(); email = String(new FormData(e.target).get('email') || '').trim().toLowerCase(); busy(e.target, true);
+        api('POST', '/auth/request-otp', { email: email }).then(step2).catch(function (x) { toast(x.message, 1); busy(e.target, false); });
       };
     }
     function step2() {
-      render(root, html`<div class="login card"><h1>Enter your code</h1><p class="sub">We sent a 6-digit code to ${phone}. It works for 5 minutes.</p><form id="f2"><label for="cd">Code</label><input id="cd" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required><button class="btn">Sign in</button> <button class="btn alt" type="button" id="back">Change number</button></form></div>`);
+      render(root, html`<div class="login card"><h1>Enter your code</h1><p class="sub">We sent a 6-digit code to ${email}. It works for 5 minutes.</p><form id="f2"><label for="cd">Code</label><input id="cd" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required><button class="btn">Sign in</button> <button class="btn alt" type="button" id="back">Change email</button></form></div>`);
       root.querySelector('#back').onclick = step1;
       root.querySelector('#f2').onsubmit = function (e) {
         e.preventDefault(); busy(e.target, true);
-        api('POST', '/auth/verify', { phone: phone, code: new FormData(e.target).get('code') })
+        api('POST', '/auth/verify', { email: email, code: new FormData(e.target).get('code') })
           .then(function (res) { store.set('pamoja_token', res.token); opts.onSuccess(res); })
           .catch(function (x) { toast(x.message, 1); busy(e.target, false); });
       };
